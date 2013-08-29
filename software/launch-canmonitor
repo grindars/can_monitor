@@ -1,0 +1,6 @@
+#!/bin/sh
+
+DYLD_LIBRARY_PATH="/usr/local/Cellar/readline/6.2.4/lib"
+export DYLD_LIBRARY_PATH
+
+exec ruby bin/caninterface "$@"

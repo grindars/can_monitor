@@ -1,0 +1,46 @@
+!!!
+%html
+  %head
+    %title CAN Monitor
+    %script{ :type => "text/javascript", :src => asset_path('application.js') }
+    %link{ :rel => "stylesheet", :type => "text/css", :href => asset_path('application.css') }
+  %body
+    .navbar.navbar-default
+      .container
+        .navbar-header
+          %button.navbar-toggle(type="button" data-toggle="collapse" data-target=".navbar-collapse")
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %span.navbar-brand CAN Monitor
+        .collapse.navbar-collapse
+          %ul.nav.navbar-nav
+          %h4.pull-right.navbar-text
+            %span.label.label-danger#connection-status-label not connected
+
+    .container#primary-container
+      .row
+        .col-md-12
+          .panel.panel-primary.col-md-12
+            .panel-body
+              .text-center
+                %form#transmit-form.form-inline.primary-form
+                  .form-group(style="width: 70%")
+                    %input.form-control(type="text" name="message" placeholder="Message")
+                  %button.btn.btn-primary(type="submit") Transmit  
+                %form#mode-form.form-inline.primary-form
+                  .checkbox
+                    %label
+                      %input(name="enabled" checked type="checkbox")
+                        Interface active
+                  .checkbox
+                    %label
+                      %input(name="loopback" checked type="checkbox")
+                        Loopback test
+                  .checkbox
+                    %label
+                      %input(name="silent" checked type="checkbox")
+                        Silent mode
+                  %button.btn.btn-default(type="submit") Set mode
+                %form#ping-form.primary-form
+                  %button.btn.btn-default(type="submit") Ping

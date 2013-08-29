@@ -1,0 +1,12 @@
+source 'https://rubygems.org'
+
+gem 'eventmachine'
+gem 'trollop'
+gem 'serialport', github: 'hparra/ruby-serialport'
+gem 'ffi'
+gem 'sprockets'
+gem 'em-websocket'
+gem 'thin'
+gem 'haml'
+gem 'sass'
+gem 'coffee-script'
