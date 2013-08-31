@@ -18,6 +18,8 @@ class CANMonitor
     "loopback"  => 4
   }
 
+  attr_reader :trace_log
+
   def initialize(opts)
     @opts = opts
     @debug_splitter = LineSplitter.new
@@ -80,8 +82,17 @@ class CANMonitor
   end
 
   def run
+    unless @opts[:trace].nil?
+      @trace_log = File.open @opts[:trace], "ab"
+    end
+
     EventMachine.run do
       @connection = CANInterface::DeviceConnection.open self, @opts[:device], 460800
+    end
+
+    unless @trace_log.nil?
+      @trace_log.close
+      @trace_log = nil
     end
   end
 

@@ -6,6 +6,9 @@ require "haml"
 require "json"
 
 class WebMonitor
+
+  attr_reader :trace_log
+
   def initialize(opts)
     @opts = opts
 
@@ -45,10 +48,19 @@ class WebMonitor
   end
 
   def run
+    unless @opts[:trace].nil?
+      @trace_log = File.open @opts[:trace], "ab"
+    end
+
     EventMachine.run do
       @thin.start
 
       try_to_connect
+    end
+
+    unless @trace_log.nil?
+      @trace_log.close
+      @trace_log = nil
     end
   end
 

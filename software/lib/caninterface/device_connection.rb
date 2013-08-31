@@ -19,7 +19,10 @@ module CANInterface
         @data = data
         if serial.nil?
           @@serial ||= 0
-          @serial = @@serial += 1
+          @@serial += 1
+          @@serial &= 65535
+          
+          @serial = @@serial
         else
           @serial = serial
         end
@@ -48,6 +51,8 @@ module CANInterface
     end
 
     def receive_data(string)
+      log_frame false, string
+
       string.each_byte do |byte|
         byte = unstuff_byte byte
         next if byte.nil?
@@ -150,7 +155,10 @@ module CANInterface
     end
 
     def send_frame(type, serial, data)
-      send_data stuff_string([ START_OF_FRAME, type, data.size, serial ].pack("CCCv") + data)
+      frame = stuff_string([ START_OF_FRAME, type, data.size, serial ].pack("CCCv") + data.force_encoding("BINARY"))
+
+      log_frame true, frame
+      send_data frame
     end
 
     def stuff_string(string)
@@ -179,6 +187,31 @@ module CANInterface
       else
         byte
       end
+    end
+
+    def log_frame(sent, data)
+      io = @watcher.trace_log
+
+      unless io.nil?
+        time = Time.now
+        length = data.length
+        length |= 0x80000000 if sent
+
+        header = [
+          0xDEADBEEF,
+          time.tv_sec,
+          time.tv_nsec,
+          length
+        ].pack("V*")
+
+        io.write header
+        io.write data
+        io.flush
+      end 
+
+    rescue => e
+      warn "logging failed: #{e}"
+      e.backtrace.each { |line| warn line }
     end
   end
 end

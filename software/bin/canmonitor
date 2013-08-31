@@ -8,6 +8,7 @@ require_relative "../lib/can_monitor"
 
 opts = Trollop.options do
   opt :device, "Device file name", :type => String, :default => "/dev/tty.usbserial-FTGD2PID"
+  opt :trace, "Trace log file", :type => String
 end
 
 monitor = CANMonitor.new(opts)
