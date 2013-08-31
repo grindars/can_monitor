@@ -100,7 +100,7 @@ static void initTask(void *arg) {
     canInit();
     commPrint(BANNER);
 
-    xTaskCreate(pumpTask, (const signed char *) "PUMP", 64, (void *) &usedTime, tskIDLE_PRIORITY + 1, &pumpHandle);
+    xTaskCreate(pumpTask, (const signed char *) "PUMP", 128, (void *) &usedTime, tskIDLE_PRIORITY + 1, &pumpHandle);
 
     while(1) {
         vTaskDelay(1000 / portTICK_RATE_MS);
